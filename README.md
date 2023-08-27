@@ -1,0 +1,1 @@
+This repository has the code for the 3 projects for I-Ling Yen's CS 4348 Operating Systems Concepts class. Each folder is a project. The projects build upon each other, so project 2 builds on 3 and 3 builds on 2. There are README.txt files inside of each of the project folders.

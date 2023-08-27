@@ -1,0 +1,3 @@
+#!/bin/bash
+
+make all && ./computer < comp.in > comp.out && ./computer < comp.in | wc

@@ -1,0 +1,15 @@
+The printer process has the following global variables that are accessed by multiple threads:
+  connectionQueue - Queue of connected client file descriptors
+  messageQueues - An array of message queues. There are NC messageQueues.
+The printer process has the following semaphores:
+  connectionQueueMutex - Binary semaphore mutex for the connectionQueue.
+  connectionQueueEmpty - Semaphore that counts the number of empty slots in the connectionQueue.
+  connectionQueueFull - Semaphore that counts the number of filled slots in the connectionQueue.
+  messageQueueMutexs - Array of binary semaphores. messageQueueMutexs[i] is a mutex for messageQueue[i].
+  messageQueueEmptys - Array of semaphores. messageQueueEmptys[i] counts the number of empty slots in messageQueues[i].
+  messageQueueFulls - Array of semaphores. messageQueueFulls[i] counts the number of filled slots in messageQueues[i].
+  sync_pc - Semaphore that counts the number of total messages in all the messageQueues.
+
+I used the bounded buffer solution to make sure mutual exclusion for the queues and to make sure none of the buffers overflowed.
+After a message is inserted into a message queue I post the sync_pc semaphore.
+In the printer_main, To reset the sync_pc semaphore, I wait on it then immediately post it. Then as print messages are dequeued from the message queues, I wait on it so the number in sync_pc will always be the number of messages left in the message queues.
